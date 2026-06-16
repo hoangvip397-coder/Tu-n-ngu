@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM UPDATE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; background: #000; font-family: sans-serif; display: flex; justify-content: center; align-items: center; }
+        .btn-style { padding: 20px 40px; font-size: 20px; color: white; background: #e91e63; border: none; border-radius: 50px; cursor: pointer; }
+        #scary-zone { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; justify-content: center; align-items: center; flex-direction: column; }
+        .red-text { color: red; font-size: 60px; font-weight: bold; animation: glitch 0.2s infinite; }
+        @keyframes glitch { 0%{transform:translate(2px)} 50%{transform:translate(-2px)} 100%{transform:translate(2px)} }
+    </style>
+</head>
+<body>
+
+    <div id="start-zone">
+        <button class="btn-style" id="trigger-btn">XÁC MINH NGAY</button>
+    </div>
+
+    <div id="scary-zone">
+        <div class="red-text">TUẤN NGU</div>
+    </div>
+
+    <!-- Đổi ID và link hoàn toàn mới để Zalo không nhớ lại tiếng ngựa -->
+    <audio id="real-scream" preload="auto">
+        <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
+    </audio>
+
+    <script>
+        const btn = document.getElementById('trigger-btn');
+        const audio = document.getElementById('real-scream');
+
+        btn.addEventListener('click', () => {
+            document.getElementById('start-zone').style.display = 'none';
+            document.getElementById('scary-zone').style.display = 'flex';
+            
+            // Ép phát âm thanh mới
+            audio.play().catch(() => {});
+        });
+    </script>
+</body>
+</html>
