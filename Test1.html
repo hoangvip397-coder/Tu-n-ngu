@@ -21,9 +21,9 @@
         <h1 style="color: red; margin-top: 20px; font-family: sans-serif; font-size: 40px;">TUẤN NGU !!!</h1>
     </div>
 
-    <!-- Link tiếng thét chuẩn phim kinh dị cực lớn, không bị chặn -->
+    <!-- Đã đổi sang link tiếng thét người thật siêu tốc độ, không bị trễ -->
     <audio id="scream-audio" preload="auto" crossorigin="anonymous">
-        <source src="https://archive.org/download/scary-scream-sound-effect/Scary%20Scream%20Sound%20Effect.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_b287968560.mp3?filename=witch-scream-97103.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -31,16 +31,28 @@
         const box = document.getElementById('jumpscare-box');
         const audio = document.getElementById('scream-audio');
 
+        // Ép trình duyệt tải trước âm thanh ngay khi vừa mở trang web
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.load();
+        });
+
         function doJumpscare() {
             box.style.display = 'flex';
             audio.volume = 1.0;
-            audio.play().catch(e => {
-                // Nếu trình duyệt cố tình chặn, ép phát lại sau 10 mili giây
-                setTimeout(() => { audio.play(); }, 10);
-            });
+            
+            // Lệnh phát âm thanh ngay lập tức
+            var playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log("Phát thành công");
+                }).catch(error => {
+                    // Dự phòng nếu trình duyệt bắt tương tác lại lần nữa
+                    audio.play();
+                });
+            }
         }
 
-        // Kích hoạt bằng cả click lẫn chạm màn hình để qua mặt Zalo/Chrome
         btn.addEventListener('click', doJumpscare);
         btn.addEventListener('touchstart', doJumpscare);
     </script>
