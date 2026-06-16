@@ -11,7 +11,7 @@ local Clipboard = setclipboard or toclipboard
 
 -- ==================== CẤU HÌNH HỆ THỐNG KEY ====================
 local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" -- Thay link vượt tiền của bạn vào đây
-local KEY_CHINH_XAC = "Key_VIP_123" -- Thay Key bạn muốn đặt vào đây
+local KEY_CHINH_XAC = "Key_gag2" -- Thay Key bạn muốn đặt vào đây
 
 -- Link script chính (UI Redz V2) của bạn:
 local LINK_SCRIPT_CHINH = "https://raw.githubusercontent.com/hoangvip397-coder/Tu-n-ngu/refs/heads/main/Scriptdemo.lua.txt" 
