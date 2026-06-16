@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { width: 100%; height: 100%; background: #000; font-family: Arial, sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         #fake-screen { text-align: center; color: white; z-index: 10; padding: 20px; }
-        .scary-btn { padding: 15px 30px; font-size: 18px; font-weight: bold; color: white; background: #00bcd4; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,188,212,0.4); }
+        .scary-btn { padding: 15px 30px; font-size: 18px; font-weight: bold; color: white; background: #00bcd4; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,188,212,0.4); -webkit-tap-highlight-color: transparent; }
         #scary-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 999; justify-content: center; align-items: center; flex-direction: column; }
         .scary-text { color: #ff0000; font-size: 70px; font-family: 'Impact', sans-serif; font-weight: bold; text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 30px #ff0000; animation: shake 0.1s infinite; }
         @keyframes shake {
@@ -25,7 +25,7 @@
 
     <div id="fake-screen">
         <h2 style="margin-bottom: 25px; font-size: 18px; color: #ccc;">Hệ thống yêu cầu xác minh thiết bị</h2>
-        <button class="scary-btn" onclick="startJumpscare()">BẤM VÀO ĐÂY ĐỂ XÁC MINH</button>
+        <button class="scary-btn" id="btn-verify">BẤM VÀO ĐÂY ĐỂ XÁC MINH</button>
     </div>
 
     <div id="scary-screen">
@@ -33,20 +33,32 @@
         <div style="color: #ff0000; font-size: 14px; margin-top: 20px; letter-spacing: 3px; font-weight: bold;">HACKED BY HOANGVIP</div>
     </div>
 
-    <!-- Đã đổi sang link .mp3 tiếng thét kinh dị chuẩn đét, máy nào cũng chạy -->
-    <audio id="screamer-sound" preload="auto">
-        <source src="https://www.soundjay.com/human/sounds/shriek-1.mp3" type="audio/mpeg">
+    <!-- Link mp3 âm thanh jumpscare tiếng thét chói tai -->
+    <audio id="screamer-sound" preload="auto" crossorigin="anonymous">
+        <source src="https://universal-soundbank.com/sounds/8739.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        function startJumpscare() {
+        const btn = document.getElementById('btn-verify');
+        const audio = document.getElementById('screamer-sound');
+
+        // Hàm kích hoạt jumpscare
+        function triggerJumpscare() {
             document.getElementById('fake-screen').style.display = 'none';
             document.getElementById('scary-screen').style.display = 'flex';
             
-            const audio = document.getElementById('screamer-sound');
             audio.volume = 1.0;
-            audio.play().catch(e => console.log("Lỗi phát nhạc"));
+            audio.play().catch(err => {
+                // Nếu vẫn bị Zalo chặn, thử phát lại lần nữa
+                setTimeout(() => { audio.play(); }, 50);
+            });
         }
+
+        // Ép Zalo nhận lệnh bằng mọi kiểu chạm ngón tay
+        btn.addEventListener('click', triggerJumpscare);
+        btn.addEventListener('touchstart', function() {
+            audio.load(); // Kích hoạt nạp âm thanh trước trên điện thoại
+        });
     </script>
 </body>
 </html>
