@@ -1,0 +1,146 @@
+_G.gag2dupe = true
+loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/Uihoangv1.lua"))()
+--[[
+    SCRIPT: gag2dupe (Key System cho Grow a Garden 2)
+    Hướng dẫn: Sửa link Get Key và Key chính xác ở dưới, sau đó chia sẻ code này cho người dùng.
+--]]
+
+local Players = game:GetService("Players")
+local MarketPlaceService = game:GetService("MarketplaceService")
+local Clipboard = setclipboard or toclipboard
+
+-- ==================== CẤU HÌNH HỆ THỐNG KEY ====================
+local LINK_GET_KEY = "https://link-cua-ban-o-day.com" -- Thay link vượt tiền của bạn vào đây
+local KEY_CHINH_XAC = "Key_VIP_123" -- Thay Key bạn muốn đặt vào đây
+
+-- Link script chính (UI Redz V2) của bạn:
+local LINK_SCRIPT_CHINH = "https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua" 
+-- ===============================================================
+
+-- KIỂM TRA XEM CÓ ĐÚNG GAME GROW A GARDEN 2 KHÔNG
+-- ID vũ trụ (UniverseId) hoặc PlaceId của game Grow a Garden 2
+local gamePlaceId = game.PlaceId 
+
+-- Tạo UI nhập Key
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "gag2dupe_KeySystem"
+ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+local Frame = Instance.new("Frame")
+Frame.Name = "MainFrame"
+Frame.Size = UDim2.new(0, 360, 0, 220)
+Frame.Position = UDim2.new(0.5, -180, 0.5, -110)
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25) -- Nền tối gaming cực ngầu
+Frame.BorderSizePixel = 0
+Frame.Active = true
+Frame.Draggable = true
+Frame.Parent = ScreenGui
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = Frame
+
+-- Tên Script gag2dupe nổi bật
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 45)
+Title.BackgroundTransparency = 1
+Title.Text = "✨ gag2dupe | GROW A GARDEN 2 ✨"
+Title.TextColor3 = Color3.fromRGB(46, 204, 113) -- Màu xanh lá hợp chủ đề khu vườn
+Title.TextSize = 18
+Title.Font = Enum.Font.SourceSansBold
+Title.Parent = Frame
+
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0.85, 0, 0, 38)
+TextBox.Position = UDim2.new(0.075, 0, 0.3, 0)
+TextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TextBox.PlaceholderText = "Nhập hoặc dán Key tại đây..."
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 15
+TextBox.Font = Enum.Font.SourceSans
+TextBox.Parent = Frame
+
+local TextBoxCorner = Instance.new("UICorner")
+TextBoxCorner.CornerRadius = UDim.new(0, 6)
+TextBoxCorner.Parent = TextBox
+
+local CopyBtn = Instance.new("TextButton")
+CopyBtn.Size = UDim2.new(0.4, 0, 0, 38)
+CopyBtn.Position = UDim2.new(0.075, 0, 0.58, 0)
+CopyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+CopyBtn.Text = "🔗 Copy Link"
+CopyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopyBtn.TextSize = 14
+CopyBtn.Font = Enum.Font.SourceSansBold
+CopyBtn.Parent = Frame
+
+local CopyCorner = Instance.new("UICorner")
+CopyCorner.CornerRadius = UDim.new(0, 6)
+CopyCorner.Parent = CopyBtn
+
+local CheckBtn = Instance.new("TextButton")
+CheckBtn.Size = UDim2.new(0.4, 0, 0, 38)
+CheckBtn.Position = UDim2.new(0.525, 0, 0.58, 0)
+CheckBtn.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
+CheckBtn.Text = "✔️ Check Key"
+CheckBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckBtn.TextSize = 14
+CheckBtn.Font = Enum.Font.SourceSansBold
+CheckBtn.Parent = Frame
+
+local CheckCorner = Instance.new("UICorner")
+CheckCorner.CornerRadius = UDim.new(0, 6)
+CheckCorner.Parent = CheckBtn
+
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(1, 0, 0, 30)
+StatusLabel.Position = UDim2.new(0, 0, 0.82, 0)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Text = "Hãy vượt link để lấy key sử dụng bản dupe!"
+StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+StatusLabel.TextSize = 13
+StatusLabel.Font = Enum.Font.SourceSansItalic
+StatusLabel.Parent = Frame
+
+-- XỬ LÝ CLICK NÚT COPY
+CopyBtn.MouseButton1Click:Connect(function()
+    if Clipboard then
+        Clipboard(LINK_GET_KEY)
+        CopyBtn.Text = "Đã sao chép!"
+        StatusLabel.TextColor3 = Color3.fromRGB(52, 152, 219)
+        StatusLabel.Text = "Đã lưu link vào bộ nhớ đệm! Hãy dán vào trình duyệt web."
+        task.wait(2)
+        CopyBtn.Text = "🔗 Copy Link"
+    else
+        StatusLabel.TextColor3 = Color3.fromRGB(230, 126, 34)
+        StatusLabel.Text = "Lỗi: Phần mềm hack của bạn không hỗ trợ Auto-Copy!"
+    end
+end)
+
+-- XỬ LÝ CLICK NÚT CHECK KEY
+CheckBtn.MouseButton1Click:Connect(function()
+    local userKey = TextBox.Text
+    
+    if userKey == KEY_CHINH_XAC then
+        StatusLabel.TextColor3 = Color3.fromRGB(46, 204, 113)
+        StatusLabel.Text = "Key chuẩn! Đang kích hoạt gag2dupe..."
+        task.wait(1.5)
+        
+        -- Tắt bảng nhập Key đi
+        ScreenGui:Destroy()
+        
+        -- TỰ ĐỘNG CHẠY SCRIPT HACK/DUPE TỪ LINK GITHUB CỦA BẠN
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(LINK_SCRIPT_CHINH, true))()
+        end)
+        
+        if not success then
+            warn("Lỗi tải script chính từ GitHub: ", err)
+        end
+    else
+        StatusLabel.TextColor3 = Color3.fromRGB(231, 76, 60)
+        StatusLabel.Text = "Sai Key rồi bạn ơi! Vui lòng kiểm tra lại."
+    end
+end)
