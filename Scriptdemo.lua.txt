@@ -17,10 +17,10 @@ KeySystemGui.ResetOnSpawn = false
 pcall(function() KeySystemGui.Parent = CoreGui end)
 if not KeySystemGui.Parent then KeySystemGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
--- KHUNG NỀN CHÍNH (Main Frame)
+-- KHUNG NỀN CHÍNH (Main Frame) - Đã tăng chiều cao lên 270 để chứa dòng chữ dài mẫu mực luôn!
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 360, 0, 240) -- Tăng chiều cao một chút để vừa dòng chữ mới
-MainFrame.Position = UDim2.new(0.5, -180, 0.5, -120)
+MainFrame.Size = UDim2.new(0, 360, 0, 270) 
+MainFrame.Position = UDim2.new(0.5, -180, 0.5, -135)
 MainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = KeySystemGui
@@ -39,10 +39,10 @@ Title.TextSize = 16
 Title.Font = Enum.Font.SourceSansBold
 Title.Parent = MainFrame
 
--- DÒNG HƯỚNG DẪN CÁCH LẤY KEY (MỚI THÊM)
+-- DÒNG HƯỚNG DẪN 1: CÁCH LẤY KEY
 local GuideText = Instance.new("TextLabel")
 GuideText.Size = UDim2.new(1, 0, 0, 20)
-GuideText.Position = UDim2.new(0, 0, 0.18, 0)
+GuideText.Position = UDim2.new(0, 0, 0.15, 0)
 GuideText.BackgroundTransparency = 1
 GuideText.Text = "Cách lấy key: nhấn join nhóm , đăng nhập là có key"
 GuideText.TextColor3 = Color3.fromRGB(241, 196, 15) -- Màu vàng nổi bật
@@ -50,10 +50,23 @@ GuideText.TextSize = 13
 GuideText.Font = Enum.Font.SourceSansBold
 GuideText.Parent = MainFrame
 
+-- DÒNG HƯỚNG DẪN 2: THÔNG BÁO EMAIL / ROBLOX (MỚI THÊM - DÒNG CHỮ DÀI)
+local LongGuideText = Instance.new("TextLabel")
+LongGuideText.Size = UDim2.new(0.9, 0, 0, 35) -- Chiều rộng chiếm 90% khung để chừa lề 2 bên
+LongGuideText.Position = UDim2.new(0.05, 0, 0.24, 0)
+LongGuideText.BackgroundTransparency = 1
+LongGuideText.Text = "Có thể nó đã gửi mã cho bạn trong email, hoặc bạn vô Roblox nhấn cho phép"
+LongGuideText.TextColor3 = Color3.fromRGB(189, 195, 199) -- Màu xám sáng dễ đọc
+LongGuideText.TextSize = 12
+LongGuideText.Font = Enum.Font.SourceSans
+LongGuideText.TextWrapped = true -- Tự động xuống dòng khi chữ quá dài
+LongGuideText.TextYAlignment = Enum.TextYAlignment.Center
+LongGuideText.Parent = MainFrame
+
 -- DÒNG TRẠNG THÁI THÔNG BÁO (Status)
 local StatusText = Instance.new("TextLabel")
 StatusText.Size = UDim2.new(1, 0, 0, 20)
-StatusText.Position = UDim2.new(0, 0, 0.28, 0)
+StatusText.Position = UDim2.new(0, 0, 0.39, 0)
 StatusText.BackgroundTransparency = 1
 StatusText.Text = "Vui lòng nhập Key để tiếp tục sử dụng Script"
 StatusText.TextColor3 = Color3.fromRGB(150, 150, 150)
@@ -64,7 +77,7 @@ StatusText.Parent = MainFrame
 -- Ô NHẬP KEY (TextBox)
 local KeyBox = Instance.new("TextBox")
 KeyBox.Size = UDim2.new(0.85, 0, 0, 35)
-KeyBox.Position = UDim2.new(0.075, 0, 0.42, 0)
+KeyBox.Position = UDim2.new(0.075, 0, 0.50, 0)
 KeyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
 KeyBox.BorderSizePixel = 0
 KeyBox.PlaceholderText = "Dán hoặc nhập Key vào đây..."
@@ -81,7 +94,7 @@ BoxCorner.Parent = KeyBox
 -- NÚT BẤM "GET KEY"
 local GetKeyBtn = Instance.new("TextButton")
 GetKeyBtn.Size = UDim2.new(0.4, 0, 0, 35)
-GetKeyBtn.Position = UDim2.new(0.075, 0, 0.68, 0)
+GetKeyBtn.Position = UDim2.new(0.075, 0, 0.74, 0)
 GetKeyBtn.BackgroundColor3 = Color3.fromRGB(41, 128, 185)
 GetKeyBtn.BorderSizePixel = 0
 GetKeyBtn.Text = "Get Key"
@@ -97,7 +110,7 @@ GetKeyCorner.Parent = GetKeyBtn
 -- NÚT BẤM "CHECK KEY"
 local CheckKeyBtn = Instance.new("TextButton")
 CheckKeyBtn.Size = UDim2.new(0.4, 0, 0, 35)
-CheckKeyBtn.Position = UDim2.new(0.525, 0, 0.68, 0)
+CheckKeyBtn.Position = UDim2.new(0.525, 0, 0.74, 0)
 CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(39, 174, 96)
 CheckKeyBtn.BorderSizePixel = 0
 CheckKeyBtn.Text = "Check Key"
