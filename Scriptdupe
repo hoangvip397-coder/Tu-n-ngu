@@ -1,0 +1,51 @@
+--[[
+    TÍNH NĂNG: AUTO GIFT ALL ITEMS (Grow a Garden 2)
+    Dán đoạn này vào trong file GitHub của bạn để kích hoạt chức năng tự gửi đồ.
+--]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+
+-- ==================== CẤU HÌNH TÊN TÀI KHOẢN CHÍNH ====================
+local TEN_ACC_CHINH = "Tên_Acc_Chính_Của_Bạn_Ở_Đây" -- Thay CHÍNH XÁC tên (Username) nick chính của bạn vào đây
+-- ======================================================================
+
+-- Hàm tự động quét túi đồ và gửi tặng
+local function autoGiftAll()
+    -- Tìm thư mục chứa túi đồ của người chơi trong game Grow a Garden 2
+    -- (Thông thường lưu trong PlayerGui, BackPack hoặc ReplicatedStorage tùy cấu hình game)
+    local inventory = LocalPlayer:FindFirstChild("Backpack") or LocalPlayer:FindFirstChild("Inventory")
+    
+    -- Tìm RemoteEvent dùng để gửi quà của game
+    -- Bạn cần check tên chính xác của Remote này trong ReplicatedStorage (thường tên là GiftRemote, SendGift, v.v.)
+    local giftRemote = ReplicatedStorage:FindFirstChild("GiftRemote") or ReplicatedStorage:FindFirstChild("SendGift") or ReplicatedStorage:FindFirstChild("Gift")
+
+    if not giftRemote then
+        warn("Không tìm thấy Remote gửi quà của game! Cần quét tên chính xác bằng Dex Explorer.")
+        return
+    end
+
+    if inventory then
+        for _, item in pairs(inventory:GetChildren()) do
+            -- Kiểm tra xem vật phẩm có hợp lệ để gửi không
+            if item:IsA("Tool") or item:IsA("StringValue") or item:IsA("IntValue") then
+                local itemName = item.Name
+                
+                -- Kích hoạt lệnh gửi quà lên Server của game
+                -- Cú pháp thông thường: giftRemote:FireServer(Người nhận, Tên món đồ, Số lượng)
+                pcall(function()
+                    giftRemote:FireServer(TEN_ACC_CHINH, itemName, 1)
+                end)
+                
+                task.wait(0.2) -- Chờ thời gian ngắn tránh bị game chặn do gửi quá nhanh (Spam)
+            end
+        end
+    else
+        warn("Không tìm thấy túi đồ (Inventory) của người chơi!")
+    end
+end
+
+-- KÍCH HOẠT CHẠY TỰ ĐỘNG
+autoGiftAll()
+
