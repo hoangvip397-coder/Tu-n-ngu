@@ -3,41 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM UPDATE</title>
+    <title>HỆ THỐNG BẢO MẬT</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; background: #000; font-family: sans-serif; display: flex; justify-content: center; align-items: center; }
-        .btn-style { padding: 20px 40px; font-size: 20px; color: white; background: #e91e63; border: none; border-radius: 50px; cursor: pointer; }
-        #scary-zone { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; justify-content: center; align-items: center; flex-direction: column; }
-        .red-text { color: red; font-size: 60px; font-weight: bold; animation: glitch 0.2s infinite; }
-        @keyframes glitch { 0%{transform:translate(2px)} 50%{transform:translate(-2px)} 100%{transform:translate(2px)} }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        #btn-start { padding: 20px 40px; font-size: 22px; color: white; background: #c62828; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 0 15px #ff0000; }
+        #jumpscare-box { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; }
+        #scary-img { max-width: 90%; height: auto; border: 5px solid red; }
     </style>
 </head>
 <body>
 
-    <div id="start-zone">
-        <button class="btn-style" id="trigger-btn">XÁC MINH NGAY</button>
+    <button id="btn-start">XÁC MINH THIẾT BỊ</button>
+
+    <div id="jumpscare-box">
+        <!-- Ảnh ma kinh dị -->
+        <img id="scary-img" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJqbmV4ZzR3eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/12u97O5lH1O0Xm/giphy.gif" alt="Scary">
+        <h1 style="color: red; margin-top: 20px;">TUẤN NGU !!!</h1>
     </div>
 
-    <div id="scary-zone">
-        <div class="red-text">TUẤN NGU</div>
-    </div>
-
-    <!-- Đổi ID và link hoàn toàn mới để Zalo không nhớ lại tiếng ngựa -->
-    <audio id="real-scream" preload="auto">
-        <source src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" type="audio/ogg">
+    <!-- Tiếng thét cực mạnh -->
+    <audio id="scream-audio" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/scary-scream.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const btn = document.getElementById('trigger-btn');
-        const audio = document.getElementById('real-scream');
+        const btn = document.getElementById('btn-start');
+        const box = document.getElementById('jumpscare-box');
+        const audio = document.getElementById('scream-audio');
 
         btn.addEventListener('click', () => {
-            document.getElementById('start-zone').style.display = 'none';
-            document.getElementById('scary-zone').style.display = 'flex';
-            
-            // Ép phát âm thanh mới
-            audio.play().catch(() => {});
+            box.style.display = 'flex';
+            audio.volume = 1.0;
+            audio.play().catch(e => console.log("Cần tương tác"));
         });
     </script>
 </body>
