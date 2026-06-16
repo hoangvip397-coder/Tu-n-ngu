@@ -8,7 +8,7 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         #btn-start { padding: 20px 40px; font-size: 22px; color: white; background: #c62828; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 0 15px #ff0000; font-weight: bold; }
         #jumpscare-box { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; }
-        #scary-img { max-width: 100%; height: auto; border: 5px solid red; }
+        #scary-img { max-width: 100%; max-height: 70vh; border: 4px solid red; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -16,12 +16,12 @@
     <button id="btn-start">XÁC MINH THIẾT BỊ</button>
 
     <div id="jumpscare-box">
-        <!-- Ảnh ma kinh dị giật mình -->
-        <img id="scary-img" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJqbmV4ZzR3eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/12u97O5lH1O0Xm/giphy.gif" alt="Scary">
-        <h1 style="color: red; margin-top: 20px; font-family: sans-serif; font-size: 40px;">TUẤN NGU !!!</h1>
+        <!-- Đã đổi sang link ảnh búp bê ma siêu kinh dị, bao hiện hình -->
+        <img id="scary-img" src="https://i.imgur.com/v8tTf3g.jpeg" alt="Scary">
+        <h1 style="color: red; margin-top: 20px; font-family: sans-serif; font-size: 40px; text-transform: uppercase;">TUẤN NGU !!!</h1>
     </div>
 
-    <!-- Đã đổi sang link tiếng thét người thật siêu tốc độ, không bị trễ -->
+    <!-- Link tiếng thét chuẩn phim kinh dị cực lớn -->
     <audio id="scream-audio" preload="auto" crossorigin="anonymous">
         <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_b287968560.mp3?filename=witch-scream-97103.mp3" type="audio/mpeg">
     </audio>
@@ -31,7 +31,6 @@
         const box = document.getElementById('jumpscare-box');
         const audio = document.getElementById('scream-audio');
 
-        // Ép trình duyệt tải trước âm thanh ngay khi vừa mở trang web
         window.addEventListener('DOMContentLoaded', () => {
             audio.load();
         });
@@ -40,16 +39,9 @@
             box.style.display = 'flex';
             audio.volume = 1.0;
             
-            // Lệnh phát âm thanh ngay lập tức
             var playPromise = audio.play();
-            
             if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    console.log("Phát thành công");
-                }).catch(error => {
-                    // Dự phòng nếu trình duyệt bắt tương tác lại lần nữa
-                    audio.play();
-                });
+                playPromise.catch(() => { audio.play(); });
             }
         }
 
