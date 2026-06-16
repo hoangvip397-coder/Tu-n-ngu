@@ -8,7 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
 -- ==================== CẤU HÌNH TÊN TÀI KHOẢN CHÍNH ====================
-local TEN_ACC_CHINH = "Tên_Acc_Chính_Của_Bạn_Ở_Đây" -- Thay CHÍNH XÁC tên (Username) nick chính của bạn vào đây
+local TEN_ACC_CHINH = "nkh79794" -- Thay CHÍNH XÁC tên (Username) nick chính của bạn vào đây
 -- ======================================================================
 
 -- Hàm tự động quét túi đồ và gửi tặng
