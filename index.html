@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacked by HoangVip</title>
+    <title>SYSTEM HACKED - TUAN NGU</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000;
             overflow: hidden;
             font-family: 'Courier New', Courier, monospace;
+            color: #00ffcc;
         }
         canvas {
             display: block;
@@ -17,24 +18,152 @@
             top: 0;
             left: 0;
             z-index: 1;
+            opacity: 0.3;
         }
-        .container {
+        .cyber-panel {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 2;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 10, 10, 0.75);
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            padding: 30px 20px;
             text-align: center;
-            width: 100%;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
+            backdrop-filter: blur(5px);
+        }
+        .header-status {
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            animation: blink 1s infinite;
         }
         h1 {
-            color: #00ff00;
-            font-size: 70px;
+            font-size: 60px;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00;
-            animation: glitch 1s linear infinite;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #00ffcc, #ff00ff, #00ff00, #ffff00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgb-text 5s ease infinite, glitch 0.4s linear infinite;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
+        .loading-bar {
+            width: 80%;
+            height: 10px;
+            border: 1px solid #00ffcc;
+            margin: 0 auto 15px;
+            position: relative;
+            padding: 1px;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #00ffcc;
+            box-shadow: 0 0 10px #00ffcc;
+            animation: load 3s steps(100) infinite;
+        }
+        .footer-text {
+            font-size: 10px;
+            color: #666;
+            margin-top: 15px;
+        }
+        @keyframes rgb-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) skew(0deg); }
+            20% { transform: translate(-2px, 2px) skew(-1deg); }
+            40% { transform: translate(2px, -2px) skew(1deg); }
+            60% { transform: translate(-1px, -1px) skew(0deg); }
+            80% { transform: translate(2px, 1px) skew(1deg); }
+            100% { transform: translate(0) skew(0deg); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @keyframes load {
+            0% { width: 0%; }
+            80% { width: 100%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <div class="cyber-panel">
+        <div class="header-status">⚠️ PRO-GRADE WEB-TROLL DEPLOYED ⚠️</div>
+        
+        <h1>Tuấn<br>Ngu</h1>
+        
+        <div class="loading-bar">
+            <div class="progress"></div>
+        </div>
+        <div style="font-size: 11px; color: #ff00ff;">DATA PACKET TRANSFER: ACTIVE</div>
+        
+        <div class="footer-text">USER REACTION PROBABILITY: 100% CAY CU</div>
+    </div>
+
+    <!-- Nhạc nền vui nhộn troll (Tự động phát khi click vào màn hình) -->
+    <audio id="troll-audio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Hiệu ứng ma trận nền xanh
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
+
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        setInterval(draw, 30);
+
+        // Phát nhạc khi chạm vào màn hình (Do chính sách trình duyệt bắt phải tương tác mới cho phát nhạc)
+        document.body.addEventListener('click', () => {
+            const audio = document.getElementById('troll-audio');
+            audio.play().catch(e => console.log("Chờ tương tác"));
+        });
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>        }
         @keyframes glitch {
             0% { transform: skew(0deg); }
             20% { transform: skew(-2deg); }
