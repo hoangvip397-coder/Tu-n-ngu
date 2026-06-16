@@ -16,12 +16,11 @@
     <button id="btn-start">XÁC MINH THIẾT BỊ</button>
 
     <div id="jumpscare-box">
-        <!-- Link ảnh kinh dị từ CDN Unsplash không bao giờ bị chặn -->
         <img id="scary-img" src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=600" alt="Scary">
         <h1 style="color: red; margin-top: 20px; font-family: sans-serif; font-size: 40px; text-transform: uppercase;">TUẤN NGU !!!</h1>
     </div>
 
-    <!-- Link tiếng thét mp3 quốc dân cực mượt -->
+    <!-- Link tiếng thét dự phòng -->
     <audio id="scream-audio" preload="auto">
         <source src="https://www.soundjay.com/human/sounds/shriek-1.mp3" type="audio/mpeg">
     </audio>
@@ -31,13 +30,41 @@
         const box = document.getElementById('jumpscare-box');
         const audio = document.getElementById('scream-audio');
 
+        function playHackSound() {
+            try {
+                // TỰ TẠO TIẾNG RÍT CHÓI TAI BẰNG CHIP ÂM THANH ĐIỆN THOẠI (KHÔNG THỂ BỊ CHẶN)
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+                
+                // Tạo tiếng rít tần số cao
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'sawtooth'; // Tiếng cưa chói tai
+                oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime); // Tần số cao nhức óc
+                
+                // Kích âm lượng max
+                gainNode.gain.setValueAtTime(1.0, audioCtx.currentTime);
+                // Giảm dần âm thanh sau 2 giây để không cháy loa
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 2);
+            } catch(e) {
+                console.log("Trình duyệt không hỗ trợ Web Audio");
+            }
+
+            // Đồng thời phát thêm file tiếng thét thực tế
+            audio.volume = 1.0;
+            audio.play().catch(() => {});
+        }
+
         function doJumpscare() {
             box.style.display = 'flex';
-            audio.volume = 1.0;
-            audio.play().catch(e => {
-                // Ép trình duyệt phát lại nếu bị chặn lần đầu
-                setTimeout(() => { audio.play(); }, 50);
-            });
+            playHackSound();
         }
 
         btn.addEventListener('click', doJumpscare);
@@ -45,4 +72,3 @@
     </script>
 </body>
 </html>
-
